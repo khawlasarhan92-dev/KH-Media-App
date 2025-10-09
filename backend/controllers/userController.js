@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const Notifications = require('../models/notificationsModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const getDataUri = require('../utils/dataUri');
+const getDataUri = require('../utils/datauri');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const { getSocketIo } = require('../utils/socketState'); 
 
