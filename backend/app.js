@@ -23,6 +23,10 @@ app.use(cors({
   origin: ['http://localhost:3000'],
   credentials: true,
 }));
+// Welcome route for root
+app.get('/', (req, res) => {
+  res.send('KH-Media-App API is running!');
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 if (process.env.NODE_ENV === 'development') {
