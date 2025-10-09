@@ -1,0 +1,138 @@
+/* تخصيص شريط التمرير ليكون رمادي رفيع في كل مكان وإخفاء الشريط الأفقي نهائيًا */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+html, body, * {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f1f1f1;
+  overscroll-behavior-x: none;
+}
+/* إخفاء الشريط الأفقي في كل مكان */
+.hide-horizontal-scrollbar {
+  overflow-x: hidden !important;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 96.1%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 96.1%;
+    --ring: 215 20.2% 65.1%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 40% 96.1%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 40% 96.1%;
+    --border: 216 12.2% 83.9%;
+    --input: 216 12.2% 83.9%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 40% 96.1%;
+    --primary: 210 40% 96.1%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 40% 96.1%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 40% 96.1%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 96.1%;
+    --ring: 216.3 12.2% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+   html, #__next { 
+    height: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-roboto), system-ui, sans-serif;
+     height: 100%; 
+    min-height: 100vh;
+     overflow-x: hidden;
+ 
+}
+@layer utilities{
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    @apply appearance-none;
+    margin: 0;
+  }
+  .no-spinner {
+    @apply appearance-none;
+  }
+}
+
+/* تخصيص شريط التمرير للدردشة فقط */
+.chat-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background: #f1f1f1;
+}
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+/* Firefox */
+.chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f1f1f1;
+}
+
+/* حاوية رئيسية لصفحة الدردشة فقط */
+.main-container {
+  @apply rounded-2xl shadow-lg bg-white w-full max-w-5xl h-[90vh] flex overflow-hidden;
+}
+
+.scrollbar-hide {
+    /* الحل لـ Firefox */
+    scrollbar-width: none;
+    /* الحل لـ IE و Edge */
+    -ms-overflow-style: none;
+}
+
+/* الحل لـ WebKit (Chrome, Safari, و Edge القديم) */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    width: 0; /* لضمان إزالة أي مساحة محجوزة */
+    height: 0;
+}
+
+/* خلفية زخرفية لنافذة الدردشة */
+.chat-bg-decor {
+  background: linear-gradient(135deg, rgba(59,130,246,0.07) 0%, rgba(59,130,246,0.03) 100%);
+}
