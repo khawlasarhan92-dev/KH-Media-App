@@ -20,7 +20,8 @@ app.use('/', express.static('uploads'));
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-app.netlify.app'], 
+  origin: ['http://localhost:3000',
+     'https://relaxed-lokum-7830a5.netlify.app'], 
   credentials: true,
 }));
 // Welcome route for root
