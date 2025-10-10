@@ -15,7 +15,8 @@ import { Notifications } from '../hooks/use-notifications';
 
 
 
-const SOCKET_URL = "http://localhost:8000";
+
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:8000";
 
 interface SocketContextType {
     socket: Socket | null;
