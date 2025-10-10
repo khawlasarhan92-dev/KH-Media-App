@@ -1,6 +1,7 @@
 
 // ChatListView.tsx
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store'; 
 import { fetchChats } from '@/store/chatThunks'; 
@@ -46,7 +47,7 @@ const ChatListView: React.FC = () => {
     return (
         <div className="flex flex-col gap-2">
             {chats.map((chat) => {
-                const otherMember = chat.members.find(m => m._id !== currentUserId);
+                const otherMember = chat.members.find((m: Partial<{ _id: string; username: string; profilePicture?: string }>) => m._id !== currentUserId);
                 const isActive = selectedChat?._id === chat._id;
                 const hasImage = !!otherMember?.profilePicture;
                 const avatarText = otherMember?.username ? otherMember.username.charAt(0).toUpperCase() : 'CN';
@@ -59,10 +60,12 @@ const ChatListView: React.FC = () => {
                     >
                         {/* صورة رمزية أو أول حرف */}
                         {hasImage ? (
-                            <img
-                                src={otherMember.profilePicture}
+                            <Image
+                                src={otherMember.profilePicture || '/images/default-avatar.png'}
                                 alt={otherMember?.username || 'avatar'}
                                 className="w-10 h-10 rounded-full object-cover border"
+                                width={40}
+                                height={40}
                             />
                         ) : (
                             <div className="w-10 h-10 rounded-full flex items-center justify-center bg-primary/20 text-primary font-bold text-lg border">

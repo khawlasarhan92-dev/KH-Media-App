@@ -7,7 +7,8 @@ import { fetchMessages } from '@/store/chatThunks';
 import { useSocket } from '../../components/Socket/SocketProvider'; 
 import MessageInput from './MessageInput'; 
 import { addNewMessage } from '@/store/chatSlice';
-import { Circle, Check, CheckCheck, ChevronLeft } from 'lucide-react'; 
+import {  ChevronLeft } from 'lucide-react';
+import Image from 'next/image';
 
 
 const formatMessageTime = (dateString: string) => {
@@ -60,7 +61,7 @@ const ChatWindow: React.FC = () => {
         }
     }, [messages]);
 
-    const chatPartner = selectedChat?.members.find(member => member._id !== currentUserId);
+    const chatPartner = selectedChat?.members.find((member: Partial<{ _id: string; username: string; profilePicture?: string }>) => member._id !== currentUserId);
    
     const isPartnerOnline = chatPartner?._id  && Array.isArray(activeUsers) &&
      activeUsers.includes(chatPartner._id) ? true : false;
@@ -87,13 +88,11 @@ const ChatWindow: React.FC = () => {
                         <ChevronLeft className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
                     </button>
                     {/* صورة المستخدم */}
-                    {chatPartner.profilePicture ? (
-                        <img src={chatPartner.profilePicture} alt={chatPartner.username}
-                         className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow" />
+                    {chatPartner?.profilePicture ? (
+                        <Image src={chatPartner.profilePicture || '/images/default-avatar.png'} alt={chatPartner.username || 'avatar'} className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow" width={48} height={48} />
                     ) : (
-                        <div className="w-12 h-12 rounded-full flex items-center justify-center
-                         bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow">
-                            {chatPartner.username[0]}
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow">
+                            {chatPartner?.username ? chatPartner.username[0] : 'U'}
                         </div>
                     )}
                     <div className="flex flex-col min-w-0">

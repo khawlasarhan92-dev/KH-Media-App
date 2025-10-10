@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import type { Post, Comment, User } from '@/types';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +10,9 @@ import { BASE_API_URL } from '@/server';
 const PostDetailsPage = () => {
   const params = useParams();
   const postId = params?.id;
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<
+    Omit<Post, 'user'> & { user: Partial<User> }
+  | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -19,7 +22,7 @@ const PostDetailsPage = () => {
       try {
         const res = await axios.get(`${BASE_API_URL}/posts/post/${postId}`, { withCredentials: true });
         setPost(res.data.data.post);
-      } catch (err: any) {
+      } catch {
         setError('Post not found or error loading post.');
       } finally {
         setLoading(false);
@@ -36,12 +39,16 @@ const PostDetailsPage = () => {
     <div className="max-w-2xl mx-auto py-10">
       <div className="bg-white rounded-xl shadow p-6">
         <div className="mb-4">
-          <Image src={post.image.url} alt="Post" width={400} height={400} className="rounded-xl object-cover" />
+          {post.image?.url ? (
+            <Image src={post.image.url} alt="Post" width={400} height={400} className="rounded-xl object-cover" />
+          ) : (
+            <div className="w-[400px] h-[400px] bg-gray-200 rounded-xl flex items-center justify-center text-gray-400">No Image</div>
+          )}
         </div>
         <div className="mb-2 flex items-center gap-2">
-          <Link href={`/profile/${post.user._id}`}
+          <Link href={`/profile/${post.user?._id}`}
             className="font-bold text-primary hover:underline">
-            {post.user.username}
+            {post.user?.username}
           </Link>
         </div>
         <div className="mb-4 text-lg text-gray-700">
@@ -51,7 +58,7 @@ const PostDetailsPage = () => {
           <h3 className="font-semibold mb-2">Comments</h3>
           {post.comments && post.comments.length > 0 ? (
             <ul className="space-y-2">
-              {post.comments.map((comment: any) => (
+              {post.comments.map((comment: Comment) => (
                 <li key={comment._id} className="bg-gray-100 rounded p-2">
                   <span className="font-bold">{comment.user?.username || 'User'}:</span> {comment.text}
                 </li>

@@ -1,9 +1,9 @@
 
 'use client';
-import React from 'react'; 
+import React from 'react';
+import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store'; 
-import { setSelectedChat } from '@/store/chatSlice';
 import { MessageSquare } from 'lucide-react';
 import { createOrOpenChat } from '@/store/chatThunks';
 import { fetchAllUsers } from '@/store/userThunks';
@@ -14,7 +14,7 @@ import { fetchAllUsers } from '@/store/userThunks';
 const ActiveUsersView: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     
-    const { chats, selectedChat, activeUsers } = useSelector((state: RootState) => state.chat);
+    const { activeUsers } = useSelector((state: RootState) => state.chat);
     const currentUserId = useSelector((state: RootState) => state.auth.user?._id);
     const users = useSelector((state: RootState) => state.user.users);
 
@@ -43,9 +43,10 @@ const ActiveUsersView: React.FC = () => {
             <div className="text-center text-gray-400 py-8">لا يوجد مستخدمين</div>
         ) : (
             <div className="flex flex-col gap-2 h-full items-stretch justify-start">
-                {filteredUsers.map((user) => {
+                {filteredUsers.map((user: Partial<{ _id: string; username: string; profilePicture?: string }>) => {
                     const isOnline = Array.isArray(activeUsers) && activeUsers.includes(String(user._id));
                     const handleStartChat = () => {
+                        if (!user._id) return;
                         console.log('[ChatSidebar] Start chat with user:', user._id, 'username:', user.username);
                         dispatch(createOrOpenChat(user._id));
                     };
@@ -66,18 +67,18 @@ const ActiveUsersView: React.FC = () => {
                                 style={{ minWidth: 48, minHeight: 48 }}
                             >
                                 {user.profilePicture ? (
-                                    <img 
-                                        src={user.profilePicture} 
-                                        alt={user.username} 
-                                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 
-                                        dark:border-cyan-400 shadow" 
+                                    <Image 
+                                        src={user.profilePicture || '/images/default-avatar.png'} 
+                                        alt={user.username || 'avatar'} 
+                                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow" 
+                                        width={48} 
+                                        height={48} 
                                     />
                                 ) : (
                                     <div 
-                                        className="w-12 h-12 rounded-full flex items-center justify-center 
-                                        bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow"
+                                        className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow"
                                     >
-                                        {user.username[0]}
+                                        {user.username ? user.username[0] : 'U'}
                                     </div>
                                 )}
                               
