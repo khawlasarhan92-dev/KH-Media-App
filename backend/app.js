@@ -20,7 +20,7 @@ app.use('/', express.static('uploads'));
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://your-app.netlify.app'], 
   credentials: true,
 }));
 // Welcome route for root
