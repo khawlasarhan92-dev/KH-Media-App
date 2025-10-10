@@ -31,7 +31,8 @@ const { setSocketIo, setActiveUsers, getSocketIo } = require('./utils/socketStat
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: [ "http://localhost:3000",
+      "https://relaxed-lokum-7830a5.netlify.app" ],
     credentials: true,
   },
 });
