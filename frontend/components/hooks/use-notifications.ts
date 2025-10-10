@@ -45,7 +45,7 @@ const useNotifications = () => {
     const result = await handleAuthRequest(fetchReq, setIsLoading);
 
     if (result?.data.status === 'success') {
-        let data: Notifications[] = result.data.data.notifications;
+        const data: Notifications[] = result.data.data.notifications;
         let finalNotifications = data;
 
        
