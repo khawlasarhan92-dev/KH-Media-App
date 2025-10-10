@@ -7,7 +7,7 @@ interface Sender {
     profilePicture: string;
 }
 
-interface Message {
+ export interface Message {
     _id: string;
     chat: string;
     sender: Sender;
@@ -29,10 +29,20 @@ interface Chat {
 interface ChatState {
     chats: Chat[]; 
     selectedChat: Chat | null; 
-    messages: Message[]; 
+    messages: (Message | TempMessage)[];  
      activeUsers: string[]; 
     isLoading: boolean;
     error: string | null;
+}
+
+export interface TempMessage {
+    _id: string; 
+    chat: string;
+    content: string;
+    sender: { _id: string }; 
+    createdAt: string;
+    readBy: string[];
+    status: 'sending'; 
 }
 
 const initialState: ChatState = {
@@ -57,31 +67,40 @@ const chatSlice = createSlice({
             state.chats = action.payload;
         },
 
-        addNewMessage: (state, action: PayloadAction<Message>) => {
-            const newMessage = action.payload;
+        addNewMessage: (state, action: PayloadAction<Message | TempMessage>) => {
+    const newMessage = action.payload;
+    
 
-            if (!newMessage._id.startsWith('temp-')) {
-                state.messages = state.messages.filter(msg => {
-                    return !(
-                        msg._id.startsWith('temp-') &&
-                        msg.content === newMessage.content &&
-                        msg.sender?._id === (newMessage.sender?._id || newMessage.sender) &&
-                        msg.chat === newMessage.chat
-                    );
-                });
-            }
+    if (!newMessage._id.startsWith('temp-')) {
+        state.messages = state.messages.filter(msg => {
+            const isMatchingTempMessage = 
+                msg._id.startsWith('temp-') &&
+                msg.content === newMessage.content &&
+                (msg as TempMessage).sender._id === (newMessage as Message).sender._id &&
+                msg.chat === newMessage.chat;
+            
+            return !isMatchingTempMessage;
+        });
+    }
 
-            const isDuplicate = state.messages.some(msg => msg._id === newMessage._id);
-            if (isDuplicate) {
-                return;
-            }
-            state.messages.push(newMessage);
+    // 2. منع إضافة رسائل مكررة (سواء كانت مؤقتة أو نهائية)
+    const isDuplicate = state.messages.some(msg => msg._id === newMessage._id);
+    if (isDuplicate) {
+        return;
+    }
+    
+    // 3. إضافة الرسالة الجديدة
+    state.messages.push(newMessage); 
 
-            const chatIndex = state.chats.findIndex(chat => chat._id === newMessage.chat);
-            if (chatIndex !== -1) {
-                state.chats[chatIndex].latestMessage = newMessage;
-            }
-     },
+    const chatIndex = state.chats.findIndex(chat => chat._id === newMessage.chat);
+    
+    if (chatIndex !== -1) {
+        if (!newMessage._id.startsWith('temp-')) {
+            state.chats[chatIndex].latestMessage = newMessage as Message; 
+        }else{} 
+             
+    }
+},
 
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload;

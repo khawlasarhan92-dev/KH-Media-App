@@ -8,9 +8,10 @@ import React, {
 import { io, Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
 import store, { AppDispatch, RootState } from '@/store/store';
-import { addNewMessage, setActiveUsers } from '@/store/chatSlice';
+import { addNewMessage, setActiveUsers , Message } from '@/store/chatSlice';
 import { setRealTimeNotification} from '@/store/notificationsSlice';
 import { fetchChats } from '../../store/chatThunks';
+import { Notifications } from '../hooks/use-notifications';
 
 
 
@@ -79,7 +80,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         newSocket.on('activeUsers', handleActiveUsers);
 
         //(NEW MESSAGE LISTENER)
-        const handleMessageReceived = (message: any) => {
+        const handleMessageReceived = (message: Message) => {
 
              if (!message || !message.chat) {
                 console.warn('Received invalid message object:', message);
@@ -115,9 +116,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
 
         // (NEW NOTIFICATIONS LISTENER)
-        const handleNewNotification = (data: any) => {
+        const handleNewNotification = (data: Notifications) => {
 
-             const senderId = data.senderId || data.sender; 
+             const senderId = data.sender._id || data.sender; 
 
       if (user?._id === senderId) { 
           return; 

@@ -1,15 +1,19 @@
 'use client';
-import React, { useState, useCallback, FormEvent } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store'; 
 import { Send, Paperclip } from 'lucide-react'; 
 import { useSocket } from '../Socket/SocketProvider'; 
 import { addNewMessage } from '../../store/chatSlice'; 
 import { sendNewMessage } from '../../store/chatThunks';
+import { TempMessage } from '../../store/chatSlice';
+
 
 interface MessageInputProps {
     chatId: string;
 }
+
+
 
 const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
     const [content, setContent] = useState('');
@@ -22,7 +26,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
 
         const messageContent = content.trim();
 
-        const tempMessage = {
+        const tempMessage : TempMessage = {
             _id: `temp-${Date.now()}`,
             chat: chatId,
             content: messageContent,
@@ -32,7 +36,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
             readBy: [currentUserId], 
         };
 
-        dispatch(addNewMessage(tempMessage as any));
+        dispatch(addNewMessage(tempMessage));
         setContent('');
 
          const result = await dispatch(sendNewMessage({ chatId, content: messageContent }));

@@ -1,11 +1,12 @@
 // Redux slice for managing notifications and unread count
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Notifications } from '@/components/hooks/use-notifications';
  
 
 interface NotificationsState {
     unreadCount: number;
-    realTimeNotification: any | null; 
+    realTimeNotification: Notifications | null;
 }
 
 const initialState: NotificationsState = {
@@ -25,9 +26,9 @@ const notificationsSlice = createSlice({
         setUnreadCount: (state, action: PayloadAction<number>) => {
             state.unreadCount = action.payload;
         },
-        
-   
-        setRealTimeNotification: (state, action: PayloadAction<any | null>) => {
+
+
+        setRealTimeNotification: (state, action: PayloadAction<Notifications | null>) => {
             state.realTimeNotification = action.payload;
         },
     

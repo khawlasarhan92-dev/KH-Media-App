@@ -9,6 +9,8 @@ import MessageInput from './MessageInput';
 import { addNewMessage } from '@/store/chatSlice';
 import {  ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
+import { Message } from '@/store/chatSlice';
+
 
 
 const formatMessageTime = (dateString: string) => {
@@ -41,8 +43,8 @@ const ChatWindow: React.FC = () => {
 
     useEffect(() => {
         if (!socket) return;
-        
-        const handleNewMessage = (newMessage: any) => {
+
+        const handleNewMessage = (newMessage: Message) => {
             if (selectedChat?._id === newMessage.chat) {
                 dispatch(addNewMessage(newMessage));
             }
@@ -70,8 +72,8 @@ const ChatWindow: React.FC = () => {
     if (!selectedChat) {
         return null; 
     }
-    
-    const isMessageReadByPartner = (msg: any) => {
+
+    const isMessageReadByPartner = (msg: Message): boolean => {
         if (!chatPartner?._id) return false;
         return msg.readBy && msg.readBy.includes(chatPartner._id);
     };
