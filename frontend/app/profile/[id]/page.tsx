@@ -1,4 +1,4 @@
-
+export const runtime = 'edge';
 import Profile from '@/components/Profile/Profile';
 import React from 'react'
 
