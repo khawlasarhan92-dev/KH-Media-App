@@ -41,11 +41,11 @@ const RightSidebar = () => {
 
     if (!user) return null;
 
-
+   
     return (
-        <div className="space-y-6 mt-6 p-4 bg-[#f7f7f8] dark:bg-background rounded-2xl shadow-xl
-                     min-h-[400px] border border-border/50">
-            {/* ويدجت المستخدم الحالي  */}
+        <div className="space-y-6 mt-6 p-4 bg-[#f7f7f8] dark:bg-background rounded-2xl shadow-xl 
+        min-h-[400px] border border-border/50 hidden md:block">
+           
             <div className='flex justify-between items-center p-3 bg-white dark:bg-card rounded-xl shadow-sm'>
                 <div className='flex items-center space-x-3'>
                     <Avatar className='w-11 h-11'>
@@ -83,10 +83,12 @@ const RightSidebar = () => {
                     </h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button onClick={fetchSuggested} title="Refresh" className="p-1 rounded-full hover:bg-primary/10 transition-colors">
+                    <button onClick={fetchSuggested} title="Refresh" 
+                    className="p-1 rounded-full hover:bg-primary/10 transition-colors">
                         <RefreshCw className="w-5 h-5 text-primary" />
                     </button>
-                    <Link href='/search?type=users' className='font-semibold text-primary text-sm cursor-pointer hover:text-primary/80 transition-colors'>
+                    <Link href='/search?type=users' 
+                    className='font-semibold text-primary text-sm cursor-pointer hover:text-primary/80 transition-colors'>
                         See all
                     </Link>
                 </div>

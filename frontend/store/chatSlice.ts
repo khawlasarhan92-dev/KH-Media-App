@@ -16,7 +16,7 @@ interface Sender {
     createdAt: string;
 }
 
-interface Chat {
+export interface Chat {
     _id: string;
     members: Sender[]; 
     latestMessage?: Message;

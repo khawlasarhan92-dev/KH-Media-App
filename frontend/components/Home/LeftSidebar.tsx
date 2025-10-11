@@ -73,9 +73,10 @@ type SidebarItem = LinkItem | ButtonItem;
     const NavLinks = SidebarItems.slice(0, 5); // Home to Create
     const FooterLinks = SidebarItems.slice(5); // Profile and Logout
 
+   
     return (
     <div className='flex flex-col h-full bg-background dark:bg-background text-card-foreground
-             border-r border-border/50 shadow-xl rounded-r-2xl min-h-screen'>
+     border-r border-border/50 shadow-xl rounded-r-2xl min-h-screen w-full max-w-xs'>
             <CreatePostModel isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
             {/* 2. الشعار */}
             <div className='lg:p-6 p-3 cursor-pointer border-b border-border/50 bg-white dark:bg-card 
@@ -110,13 +111,13 @@ type SidebarItem = LinkItem | ButtonItem;
                             <div className='w-7 h-7 flex items-center justify-center text-xl'>
                                 {link.icon}
                             </div>
-                            <p className='hidden lg:block lg:text-lg text-base ml-4'>
+                           
+                            <p className='block lg:block lg:text-lg text-base ml-4'>
                                 {link.label}
                             </p>
-                            {/*  4. إضافة العداد (Badge) */}
+                         
                             {'hasBadge' in link && link.hasBadge && unreadCount > 0 && (
-                                <span className='absolute top-0 left-7 lg:left-1 lg:top-1 w-2
-                                 h-2 rounded-full bg-red-500'></span>
+                                <span className='absolute top-0 left-7 lg:left-1 lg:top-1 w-2 h-2 rounded-full bg-red-500'></span>
                             )}
                         </div>
                     );
@@ -138,6 +139,8 @@ type SidebarItem = LinkItem | ButtonItem;
             </div>
             {/* 4. قسم البروفايل وتسجيل الخروج (الأسفل) */}
             <div className='p-4 lg:p-6 mt-auto border-t border-border/50 bg-white dark:bg-card rounded-b-2xl shadow-sm'>
+               
+                <div className='pb-6 sm:pb-0'>
                 {FooterLinks.map((link) => {
                     const isProfile = link.label === "Profile";
                     const isLogout = link.label === "Logout";
@@ -147,17 +150,17 @@ type SidebarItem = LinkItem | ButtonItem;
                             <Link
                                 key={link.label}
                                 href={(link as LinkItem).href}
-                                className='flex items-center space-x-3 p-3 rounded-full hover:bg-gray-200 
-                                    transition-colors mb-2 shadow-sm'
+                                className='flex items-center space-x-3 p-3 rounded-full hover:bg-gray-200 transition-colors mb-2 shadow-sm'
                             >
                                 <div className='relative w-10 h-10'>
                                     {link.icon}
                                 </div>
-                                <div className='hidden lg:block'>
+                              
+                                <div className='block lg:block'>
                                     <p className='text-sm font-semibold text-foreground truncate'>
                                         {user?.username || 'User'}
                                     </p>
-                                    <p className='text-xs text-muted-foreground truncate'>{user?.email || '@handle'}</p>
+                                    <p className='text-xs text-muted-foreground truncate max-w-[120px] lg:max-w-[180px]'>{user?.email || '@handle'}</p>
                                 </div>
                             </Link>
                         );
@@ -165,17 +168,18 @@ type SidebarItem = LinkItem | ButtonItem;
 
                     if (isLogout) {
                         return (
-                            <div key={link.label} onClick={(link as ButtonItem).onClick} className='cursor-pointer'>
-                                <div className='flex items-center space-x-3 p-3 rounded-full hover:bg-gray-200 
-                                        transition-colors shadow-sm'>
+                            <div key={link.label} onClick={(link as ButtonItem).onClick} className='cursor-pointer mt-4'>
+                                <div className='flex items-center space-x-3 p-3 rounded-full hover:bg-gray-200 transition-colors shadow-sm w-full sm:w-full justify-center sm:mb-2'>
                                     {link.icon}
-                                    <p className='hidden lg:block lg:text-lg text-base ml-4 text-foreground/80'>Logout</p>
+                                   
+                                    <p className='block lg:block lg:text-lg text-base lg:ml-4 ml-1 text-foreground/80 w-full text-center'>Logout</p>
                                 </div>
                             </div>
                         );
                     }
                     return null;
                 })}
+                </div>
             </div>
         </div>
     );

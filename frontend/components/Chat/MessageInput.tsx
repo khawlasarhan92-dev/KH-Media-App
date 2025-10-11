@@ -63,7 +63,8 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
 
     return (
         <form
-            className="flex items-center gap-2 bg-blue-50 rounded-xl shadow px-3 py-2"
+            className="flex items-center gap-2 bg-blue-50 rounded-none md:rounded-xl 
+            shadow px-1 sm:px-2 md:px-3 py-2 md:py-3 w-full"
             onSubmit={(e) => {
                 e.preventDefault();
                 handleSendMessage();

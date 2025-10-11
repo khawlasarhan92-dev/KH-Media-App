@@ -50,24 +50,29 @@ const Home = () => {
 
   return (
     <div className='flex bg-[#ececec] dark:bg-[#23272f] min-h-screen'>
+     
       <div className='w-[20%] hidden md:block border-r-2 h-screen fixed'>
         <LeftSidebar />
       </div>
-  <div className='flex-1 md:ml-[20%] max-w-3xl overflow-auto'>
+     
+      <div className='flex-1 md:ml-[20%] max-w-3xl overflow-auto'>
+      
         <div className='md:hidden'>
           <Sheet>
-            <SheetTrigger>
-              <MenuIcon />
+            <SheetTrigger className='fixed top-4 left-4 z-50 bg-white rounded-full shadow-lg p-2'>
+              <MenuIcon className='w-7 h-7 text-primary' />
             </SheetTrigger>
-            <SheetContent>
-              <SheetTitle></SheetTitle>
-              <SheetDescription></SheetDescription>
+            <SheetContent side='left' className='p-0 w-[80vw] max-w-xs'>
+              <SheetTitle className='hidden' />
+              <SheetDescription className='hidden' />
+             
               <LeftSidebar />
             </SheetContent>
           </Sheet>
         </div>
         <Feed />
       </div>
+     
       <div className='w-[30%] pt-8 px-6 lg:block hidden'>
         <RightSidebar />
       </div>

@@ -3,8 +3,6 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'; 
-import Image from 'next/image';
-import LoadingButton from '../Helper/LoadingButton';
 import { Button } from '../ui/button';
 import { ImageIcon, X } from 'lucide-react'; 
 import { toast } from 'sonner';
@@ -13,6 +11,7 @@ import { BASE_API_URL } from '@/server';
 import { handleAuthRequest } from '../utils/apiRequest';
 import { addPost } from '@/store/postSlice';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 type Props = {
     isOpen: boolean;
@@ -93,24 +92,35 @@ const CreatePostModel = ({ isOpen, onClose }: Props) => {
 
 return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className={cn("sm:max-w-[425px]",
-             previewImage && "sm:max-w-4xl max-h-[90vh] overflow-hidden p-0")}> 
-            
+        <DialogContent
+            className={cn(
+              
+                "sm:max-w-[425px]",
+                previewImage && "sm:max-w-4xl max-h-[90vh] overflow-hidden p-0",
+              
+                "w-full max-w-[95vw] max-h-screen overflow-y-auto p-0 pb-2",
+              
+                "xs:w-full xs:max-w-full xs:max-h-screen xs:overflow-y-auto xs:p-0 xs:pb-4"
+            )}
+        >
             {previewImage ? (
-                <div className='flex flex-col h-full'>
+                <div className='flex flex-col h-full max-h-screen overflow-y-auto pb-4'>
                     <DialogHeader className='border-b border-border/70 p-4'>
                         <DialogTitle className='text-center text-2xl font-bold'>
                             Finalize Post
                         </DialogTitle>
                     </DialogHeader>
-                    <div className='flex flex-col md:flex-row h-full overflow-y-auto'>
+                    <div className='flex flex-col md:flex-row h-full'>
                         <div className='flex-1 flex items-center justify-center p-4 min-h-[350px] max-h-[60vh]'>
                             <div className='w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-800
                              rounded-lg border border-border overflow-hidden'>
-                                <img
+                                <Image
                                     src={previewImage}
                                     alt="Post Preview"
+                                    width={600}
+                                    height={600}
                                     className="w-full h-full object-contain"
+                                    unoptimized
                                 />
                             </div>
                         </div>

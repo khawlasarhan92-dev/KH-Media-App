@@ -38,7 +38,7 @@ const ActiveUsersView: React.FC = () => {
 
 
    return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-x-auto flex flex-row gap-2 px-1 sm:px-2">
         {filteredUsers.length === 0 ? (
             <div className="text-center text-gray-400 py-8">لا يوجد مستخدمين</div>
         ) : (
@@ -55,28 +55,25 @@ const ActiveUsersView: React.FC = () => {
                         <div
                             key={user._id}
                             onClick={handleStartChat}
-                            className={`flex flex-row items-center w-full px-3 py-2 cursor-pointer bg-white/80 
-                              hover:bg-blue-50 dark:bg-gray-900/70 dark:hover:bg-gray-800 transition rounded-xl
-                               group min-h-[64px] border border-transparent hover:border-blue-300 
-                               dark:hover:border-cyan-400 shadow-sm overflow-hidden`}
+                            className={`flex flex-row items-center min-w-[180px] sm:w-full px-2 sm:px-3 py-2 cursor-pointer bg-white/80 hover:bg-blue-50 dark:bg-gray-900/70 dark:hover:bg-gray-800 transition rounded-xl group min-h-[48px] sm:min-h-[64px] border border-transparent hover:border-blue-300 dark:hover:border-cyan-400 shadow-sm overflow-hidden`}
                         >
                             
                             {/* الصورة وحالة الاتصال ) */}
                             <div 
-                                className="relative flex-shrink-0 flex items-center justify-center ml-3" 
-                                style={{ minWidth: 48, minHeight: 48 }}
+                                className="relative flex-shrink-0 flex items-center justify-center ml-1 sm:ml-3" 
+                                style={{ minWidth: 32, minHeight: 32 }}
                             >
                                 {user.profilePicture ? (
                                     <Image 
                                         src={user.profilePicture || '/images/default-avatar.png'} 
                                         alt={user.username || 'avatar'} 
-                                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow" 
-                                        width={48} 
-                                        height={48} 
+                                        className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow" 
+                                        width={32} 
+                                        height={32} 
                                     />
                                 ) : (
                                     <div 
-                                        className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow"
+                                        className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-base sm:text-xl font-bold shadow"
                                     >
                                         {user.username ? user.username[0] : 'U'}
                                     </div>
@@ -90,17 +87,16 @@ const ActiveUsersView: React.FC = () => {
                             </div>
                           
                             <div className="flex flex-col justify-center min-w-0 flex-grow items-start text-left ml-2"> 
-                                <span className="truncate text-base font-semibold text-gray-800 dark:text-gray-100 leading-5">
+                                <span className="truncate text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-100 leading-5">
                                     {user.username}
                                 </span>
-                                <span className={`text-xs ${isOnline ? 'text-green-500' : 'text-gray-400'} 
-                                    font-medium mt-0.5 leading-4`}>
+                                <span className={`text-xs ${isOnline ? 'text-green-500' : 'text-gray-400'} font-medium mt-0.5 leading-4`}>
                                     {isOnline ? 'نشط الآن' : 'غير متصل'}
                                 </span>
                             </div>
 
                             <span className="text-xs text-gray-400 font-medium whitespace-nowrap ml-3 flex-shrink-0">
-                                الآن
+                                <span className="text-xs text-gray-400 font-medium whitespace-nowrap ml-1 sm:ml-3 flex-shrink-0">الآن</span>
                             </span>
 
                         </div>

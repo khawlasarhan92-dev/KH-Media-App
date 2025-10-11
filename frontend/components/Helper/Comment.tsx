@@ -56,7 +56,7 @@ const Comment = ({ post, user }: Props) => {
                         View All {commentCount} Comment{commentCount !== 1 ? 's' : ''}
                     </p>
                 </DialogTrigger>
-                <DialogContent className='max-w-4xl p-0 flex h-[85vh] sm:h-[90vh] rounded-xl'>
+                <DialogContent className='max-w-4xl p-0 flex h-[85vh] sm:h-[90vh] rounded-xl px-2 sm:px-6'>
                     <DialogTitle className='sr-only'>Post Comments</DialogTitle> 
                     
                     <div className='flex flex-1 w-full'>

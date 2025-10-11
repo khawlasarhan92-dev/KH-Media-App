@@ -16,8 +16,7 @@ const AppLayout = ({ children }: Props) => {
     return (
         <div className="flex min-h-screen bg-background text-foreground transition-colors duration-500">
             {!isMessagesPage && (
-                <div className="hidden md:block sticky top-0 h-screen flex-shrink-0 w-[20%] border-r 
-                border-border/50 bg-background">
+                <div className="hidden md:block sticky top-0 h-screen flex-shrink-0 w-[20%] border-r border-border/50 bg-background">
                     <LeftSidebar />
                 </div>
             )}

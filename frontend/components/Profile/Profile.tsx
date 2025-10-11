@@ -101,24 +101,25 @@ const Profile = ({ id }: Props) => {
                                 {userProfile?.username?.charAt(0).toUpperCase() || "CN"}
                             </AvatarFallback>
                         </Avatar>
-
                         {/* المعلومات والإحصائيات */}
                         <div className="flex flex-col items-center md:items-start space-y-4 w-full">
-                            <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                                <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                            {/* اسم المستخدم تحت الصورة للجوال */}
+                            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mt-2 mb-2 block sm:hidden">
+                                {userProfile?.username}
+                            </h1>
+                            {/* أزرار الإجراء (Edit/Follow/Unfollow) */}
+                            <div className="flex flex-wrap items-center gap-4 md:gap-6 w-full justify-center md:justify-start">
+                                <h1 className="hidden sm:block text-2xl sm:text-3xl font-bold text-foreground">
                                     {userProfile?.username}
                                 </h1>
-
-                                {/* أزرار الإجراء (Edit/Follow/Unfollow) */}
                                 {isOwnProfile ? (
                                     <Link href="/edit-profile">
-                                        <Button variant="outline" className="rounded-full px-6 text-sm hover:bg-accent/50
-                                             transition-all">
+                                        <Button variant="outline" className="rounded-full px-6 text-sm hover:bg-accent/50 transition-all">
                                             Edit Profile
                                         </Button>
                                     </Link>
                                 ) : (
-                                    <div className="flex gap-4 items-center">
+                                    <div className="flex gap-4 items-center md:flex-col md:items-start md:gap-2">
                                         <StartChatButton targetUserId={id} />
                                         <Button
                                             variant={isFollowing ? "destructive" : "default"}
@@ -137,7 +138,6 @@ const Profile = ({ id }: Props) => {
                                     </div>
                                 )}
                             </div>
-
                             {/* الإحصائيات (Stats) */}
                             <div className="flex flex-wrap gap-6 text-base md:text-lg pt-2">
                                 <p className="font-semibold">
@@ -150,7 +150,6 @@ const Profile = ({ id }: Props) => {
                                     <span className="font-bold mr-1">{userProfile?.following?.length || 0}</span> Following
                                 </p>
                             </div>
-
                             {/* البايو (Bio) */}
                             <p className="w-full max-w-lg pt-2 text-center md:text-left text-gray-500 text-base font-normal">
                                 {userProfile?.bio || "My Profile Bio Here"}

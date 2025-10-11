@@ -17,7 +17,11 @@ const formatMessageTime = (dateString: string) => {
     return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
-const ChatWindow: React.FC = () => {
+interface ChatWindowProps {
+    onBack?: () => void;
+}
+
+const ChatWindow: React.FC<ChatWindowProps> = ({ onBack }) => {
     const dispatch = useDispatch<AppDispatch>();
     
     const { selectedChat, messages, isLoading, activeUsers } = useSelector((state: RootState) => state.chat);
@@ -80,39 +84,43 @@ const ChatWindow: React.FC = () => {
 
 
     return (
-        <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full rounded-none md:rounded-xl">
             {/* Header */}
             {selectedChat && chatPartner && (
-                <div className="flex items-center gap-4 px-5 py-4 border-b bg-white/80 dark:bg-gray-900/80
-                             backdrop-blur-md sticky top-0 z-10 shadow-sm">
-                    <button onClick={() => window.history.back()} className="md:hidden p-2 rounded-full hover:bg-blue-100 
-                                                                    dark:hover:bg-cyan-900">
+                <div className="flex items-center gap-4 px-5 py-4 border-b bg-white/80
+                 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-10 shadow-sm">
+                    <button onClick={onBack} className="md:hidden p-2 rounded-full hover:bg-blue-100 dark:hover:bg-cyan-900">
                         <ChevronLeft className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
                     </button>
                     {/* صورة المستخدم */}
                     {chatPartner?.profilePicture ? (
-                        <Image src={chatPartner.profilePicture || '/images/default-avatar.png'} alt={chatPartner.username || 'avatar'} className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow" width={48} height={48} />
+                        <Image src={chatPartner.profilePicture || '/images/default-avatar.png'} 
+                        alt={chatPartner.username || 'avatar'} 
+                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 dark:border-cyan-400 shadow"
+                         width={48} height={48} />
                     ) : (
-                        <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow">
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center
+                         bg-gradient-to-br from-blue-400 to-cyan-400 text-white text-xl font-bold shadow">
                             {chatPartner?.username ? chatPartner.username[0] : 'U'}
                         </div>
                     )}
                     <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-gray-800 dark:text-gray-100 text-base truncate">
+                        <span className="font-semibold text-blue-700 dark:text-cyan-400 text-base truncate">
                             {chatPartner.username}
                         </span>
-                        <span className={`flex items-center gap-1 text-xs font-medium mt-0.5
-                             ${isPartnerOnline ? 'text-green-500' : 'text-gray-400'}`}>
+                        <span className={`flex items-center gap-1 text-xs font-medium mt-0.5 
+                            ${isPartnerOnline ? 'text-green-500' : 'text-gray-400'}`}>
                             <span className={`inline-block w-2 h-2 rounded-full 
-                                ${isPartnerOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
-                            </span>
+                                ${isPartnerOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                             {isPartnerOnline ? 'active now' : ' offline'}
                         </span>
                     </div>
                 </div>
             )}
             {/* Messages */}
-            <div className="flex-1 flex flex-col gap-2 px-2 md:px-6 py-4 overflow-y-auto chat-bg-decor rounded-xl">
+            <div className="flex-1 flex flex-col gap-2 px-1 sm:px-2 md:px-6 py-2 md:py-4 
+            overflow-y-auto chat-bg-decor rounded-none md:rounded-xl" 
+            style={{ maxHeight: 'calc(100vh - 180px)' }}>
                 {isLoading ? (
                     <div className="text-center text-gray-400 py-8">Loading messages...</div>
                 ) : (
@@ -128,8 +136,13 @@ const ChatWindow: React.FC = () => {
                                             ? 'bg-blue-500 text-white rounded-br-md'
                                             : 'bg-white text-gray-800 rounded-bl-md'} flex flex-col`}>
                                         <span>{msg.content}</span>
-                                        <span className="text-[10px] text-gray-300 mt-1 self-end">
+                                        <span className="text-[10px] text-gray-300 mt-1 self-end flex items-center gap-1">
                                             {formatMessageTime(msg.createdAt)}
+                                            {isMine && 'readBy' in msg && (
+                                                isMessageReadByPartner(msg as Message)
+                                                    ? <span title="Read">✓✓</span>
+                                                    : <span title="Sent">✓</span>
+                                            )}
                                         </span>
                                     </div>
                                 </div>
@@ -141,7 +154,7 @@ const ChatWindow: React.FC = () => {
             </div>
             {/* Message Input */}
             {selectedChat && (
-                <div className="px-2 md:px-6 py-3 bg-white/90 backdrop-blur-md border-t shadow-inner">
+                <div className="px-1 sm:px-2 md:px-6 py-2 md:py-3 bg-white/90 backdrop-blur-md border-t shadow-inner">
                     <MessageInput chatId={selectedChat._id} />
                 </div>
             )}
