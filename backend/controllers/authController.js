@@ -48,7 +48,7 @@ exports.signup = catchAsync(async(req , res , next) =>{
     return next(new AppError('Emaill already registerd' , 400));
   }
   const otp = generateOtp();
-  const otpExpires = Date.now() + 24 * 60 *  60 * 1000;
+  const otpExpires = Date.now() + 24 * 60 *  60 * 1000;
   const newUser = await User.create({
     username,
     email,
@@ -57,31 +57,47 @@ exports.signup = catchAsync(async(req , res , next) =>{
     otp,
     otpExpires
   });
- const htmlTemplate = loadTemplate('otpTemplate.hbs' ,{
-  title:'Otp Verification',
-  username:newUser.username,
-  otp,
-  message: 'Your one-time password (OTP) for account verification is :',
- });
- try {
-  await sendEmail({
-    email:newUser.email,
-    subject:'OTP for Email verification',
-    html:htmlTemplate,
+  
+  const htmlTemplate = loadTemplate('otpTemplate.hbs' ,{
+    title:'Otp Verification',
+    username:newUser.username,
+    otp,
+    message: 'Your one-time password (OTP) for account verification is :',
   });
-  createSendToken(
+  
+  // 🛑🛑🛑 START OF TEMPORARY COMMENT BLOCK 🛑🛑🛑
+  /*
+  try {
+    await sendEmail({
+      email:newUser.email,
+      subject:'OTP for Email verification',
+      html:htmlTemplate,
+    });
+    createSendToken(
+      newUser,
+      200,
+      res,
+      'Registration successful.Check your email for otp verification'
+    );
+  } catch (error) {
+    // 🛑 إذا حدث فشل هنا، يتم حذف المستخدم
+    await User.findByIdAndDelete(newUser.id);
+    return next(new AppError(
+      'There is an error creating an account.Please try again later',
+      500
+    ));
+  }
+  */
+  // 🛑🛑🛑 END OF TEMPORARY COMMENT BLOCK 🛑🛑🛑
+  
+  // ✅ هذا هو الجزء الذي كان داخل try، نضعه هنا ليتم تنفيذه دائماً (بدون إرسال إيميل)
+  createSendToken( 
     newUser,
     200,
     res,
-  'Registration successful.Check your email for otp verification'
+    'Registration successful. (Email check bypassed for testing)'
   );
- } catch (error) {
-  await User.findByIdAndDelete(newUser.id);
-  return next(new AppError(
-    'There is an error creating an account.Please try again later',
-    500
-  ));
- }
+  
 });
 
 exports.verifyAccount = catchAsync(async(req ,res ,next) =>{
