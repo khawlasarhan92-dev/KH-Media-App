@@ -43,7 +43,7 @@ type SidebarItem = LinkItem | ButtonItem;
     const { unreadCount } = useNotifications();
 
     const handleLogout = async () => {
-        await axios.post(`${BASE_API_URL}/users/logout`, {}, { withCredentials: true });
+        await axios.post(`${BASE_API_URL}/auth/logout`, {}, { withCredentials: true });
         dispatch(setAuthUser(null));
         dispatch(resetChatState()); 
         toast.success("Logged out successfully");

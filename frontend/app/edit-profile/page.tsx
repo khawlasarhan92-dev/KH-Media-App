@@ -67,7 +67,7 @@ const EditProfile = () => {
       newPasswordConfirm
     };
     const updatePasswordReq = async() =>
-      await axios.post(`${BASE_API_URL}/users/change-password`,data,
+      await axios.post(`${BASE_API_URL}/auth/change-password`,data,
         {withCredentials:true});
     const result = await handleAuthRequest(updatePasswordReq,setIsLoading);
     if(result){
