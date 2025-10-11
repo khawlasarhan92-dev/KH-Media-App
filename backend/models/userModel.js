@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   password:{
     type:String,
     required:[true , 'Please provide password'],
-     maxlenght:8,
+     maxlength:1024,
      select:false,
   },
   passwordConfirm:{
@@ -99,13 +99,13 @@ userSchema.index({
 
 userSchema.pre('save' ,async function(next){
   if(!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password , 12);
+  this.password = await bcrypt.hash(this.password , 10);
   this.passwordConfirm = undefined;
   next();
 });
 
-userSchema.methods.correctPassword = async function(userPaasword,databasePassword) {
-  return await bcrypt.compare(userPaasword ,databasePassword);
+userSchema.methods.correctPassword = async function(userPassword,databasePassword) {
+  return await bcrypt.compare(userPassword ,databasePassword);
 };
 
 

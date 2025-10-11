@@ -88,8 +88,9 @@ const NotificationsItem = ({ notification }: Props) => {
                             />
                         </div>
                     ) : notification.type !== 'follow' && !notification.contentId?.image?.url ? (
-                        <div className="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-lg text-xs text-gray-400 border">
-                          post is deleted
+                        <div className="w-fit h-8 flex items-center justify-center bg-red-50 rounded-xl 
+                        text-[11px] font-semibold text-red-400 border shadow-sm px-3">
+                            Deleted by owner
                         </div>
                     ) : null}
 
