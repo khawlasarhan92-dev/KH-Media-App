@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(cors({
   origin: ['http://localhost:3000',
-     'https://relaxed-lokum-7830a5.netlify.app'], 
+     'https://32ef78dd.kh-media-app.pages.dev/'], 
   credentials: true,
 }));
 // Welcome route for root
