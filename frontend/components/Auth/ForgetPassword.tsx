@@ -16,7 +16,7 @@ const router = useRouter();
 
 const handleSubmit = async() =>{
   const forgetPassReq = async() =>
-    await axios.post(`${BASE_API_URL}/users/forget-password`,
+    await axios.post(`${BASE_API_URL}/auth/forget-password`,
       {email},{withCredentials:true});
    const result = await handleAuthRequest(forgetPassReq , setIsLoading);
    if(result){

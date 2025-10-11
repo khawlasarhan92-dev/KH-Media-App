@@ -31,7 +31,7 @@ const PasswordReset = () => {
     const data = {email ,otp ,password ,passwordConfirm};
 
     const resetPassReq = async() =>
-    await  axios.post(`${BASE_API_URL}/users/reset-password`,
+    await  axios.post(`${BASE_API_URL}/auth/reset-password`,
       data ,{withCredentials:true});
 
     const result = await handleAuthRequest(resetPassReq ,setIsLoading);

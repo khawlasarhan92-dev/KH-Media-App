@@ -60,7 +60,7 @@ const handleKeyDown = (
 const handleSubmit = async ()=>{
   const otpValue = otp.join("");
   const verifyReq = async()=>
-     await axios.post(`${BASE_API_URL}/users/verify`,
+     await axios.post(`${BASE_API_URL}/auth/verify`,
       {otp:otpValue},{withCredentials:true});
  const result = await handleAuthRequest(verifyReq ,setIsLoading);
  
@@ -73,7 +73,7 @@ const handleSubmit = async ()=>{
 
 const handleResendOtp = async() =>{
   const resendOtpReq = async()=>
-    await axios.post(`${BASE_API_URL}/users/resend-otp`,
+    await axios.post(`${BASE_API_URL}/auth/resend-otp`,
       null, {withCredentials:true});
   const result = await handleAuthRequest(resendOtpReq,setIsLoading);
     if(result){

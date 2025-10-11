@@ -38,7 +38,7 @@ const Login = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         // create our request
-        const loginReq = async () => await axios.post(`${BASE_API_URL}/users/login`, formData, {
+        const loginReq = async () => await axios.post(`${BASE_API_URL}/auth/login`, formData, {
             withCredentials: true,
             headers: { 'Content-Type': 'application/json' },
         });

@@ -13,6 +13,7 @@ const notificationsRoutes = require('./routes/notificationsRoutes.js');
 const searchRoutes = require('./routes/searchRoutes.js'); 
 const chatRoutes = require('./routes/chatRoutes.js');
 const messageRoutes = require('./routes/messageRoutes.js');
+const authRoutes = require('./routes/authRoutes.js');
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use('/api/v1/notifications' , notificationsRoutes);
 app.use('/api/v1/search' , searchRoutes);
 app.use('/api/v1/chats' , chatRoutes);
 app.use('/api/v1/messages' , messageRoutes);
+app.use('/api/v1/auth' , authRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`can not find ${req.originalUrl} on this server!`, 404));
