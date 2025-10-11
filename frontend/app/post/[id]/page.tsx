@@ -1,17 +1,25 @@
-export const runtime = 'edge';
 "use client";
+export const runtime = 'edge';
+
 
 import React, { useEffect, useState } from 'react';
 import type { Post, Comment, User } from '@/types';
-import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 import { BASE_API_URL } from '@/server';
 
-const PostDetailsPage = () => {
-  const params = useParams();
-  const postId = params?.id;
+
+
+interface PostPageProps {
+  params: {
+    id: string; 
+  };
+}
+
+const PostDetailsPage = ({ params }: PostPageProps) => {
+ const postId = params.id;
+  
   const [post, setPost] = useState<
     Omit<Post, 'user'> & { user: Partial<User> }
   | null>(null);
