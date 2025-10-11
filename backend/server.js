@@ -32,7 +32,7 @@ const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
     origin: [ "http://localhost:3000",
-      "https://32ef78dd.kh-media-app.pages.dev/" ],
+      "https://kh-media-app.pages.dev" ],
     credentials: true,
   },
 });
