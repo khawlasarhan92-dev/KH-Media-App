@@ -97,14 +97,18 @@ io.on("connection", (socket) => {
 // Database Connection
 mongoose.connect(process.env.DB)
   .then(() => {
-    // Database connected successfully
+    console.log('MongoDB connected successfully');
   })
   .catch((err) => {
-    // Database connection error
+    console.error('MongoDB connection error:', err && err.message ? err.message : err);
   });
 
 // Start Server
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
-  // Server is running
+  console.log(`Server is running and listening on port ${port}`);
+});
+
+server.on('error', (err) => {
+  console.error('Server error:', err && err.message ? err.message : err);
 });

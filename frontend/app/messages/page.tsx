@@ -38,9 +38,9 @@ const MessagesPage = () => {
          from-blue-100 via-white to-cyan-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 
          transition-colors duration-500">
             <div className="main-container w-full h-[92vh] flex rounded-none md:rounded-3xl 
-            shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 backdrop-blur-xl px-0 md:px-4">
+            shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 backdrop-blur-xl px-0 md:px-4 min-h-0">
                 {/* للجوال فقط */}
-                <div className="block md:hidden w-full h-full">
+                <div className="flex md:hidden w-full h-full flex-col min-h-0">
                     {/* الهيدر وزر التبديل */}
                     {!showChatWindow && (
                         <div className="p-4 border-b border-gray-100 bg-white/90 flex items-center justify-between shadow-sm">
@@ -50,12 +50,12 @@ const MessagesPage = () => {
                         </div>
                     )}
                     {!showChatWindow && (
-                        <div className="w-full flex-1 overflow-y-auto">
+                        <div className="w-full flex-1 flex flex-col min-h-0">
                             <ChatListView onSelectChat={handleSelectChat} />
                         </div>
                     )}
                     {showChatWindow && (
-                        <div className="w-full flex-1 overflow-y-auto">
+                        <div className="w-full flex-1 flex flex-col min-h-0">
                             <ChatWindow onBack={handleBack} />
                         </div>
                     )}

@@ -74,33 +74,37 @@ exports.signup = catchAsync(async(req , res , next) =>{
 
  });
 
- // Email sending temporarily disabled for production/demo
- // try {
- //   await sendEmail({
- //     email:newUser.email,
- //     subject:'OTP for Email verification',
- //     html:htmlTemplate,
- //   });
- //   createSendToken(
- //     newUser,
- //     200,
- //     res,
- //     'Registration successful.Check your email for otp verification'
- //   );
- // } catch (error) {
- //   await User.findByIdAndDelete(newUser.id);
- //   return next(new AppError(
- //     'There is an error creating an account.Please try again later',
- //     500
- //   ));
- // }
- // Directly create and send token for registration (no email verification)
- createSendToken(
-   newUser,
-   200,
-   res,
-   'Registration successful. (Email verification is disabled for demo)'
- );
+  // If SEND_EMAILS is explicitly 'false', skip sending and proceed (demo mode)
+  if (process.env.SEND_EMAILS === 'false') {
+    createSendToken(
+      newUser,
+      200,
+      res,
+      'Registration successful. (Email verification is disabled for demo)'
+    );
+    return;
+  }
+
+  try {
+    await sendEmail({
+      email: newUser.email,
+      subject: 'OTP for Email verification',
+      html: htmlTemplate,
+    });
+    createSendToken(
+      newUser,
+      200,
+      res,
+      'Registration successful. Check your email for otp verification'
+    );
+  } catch (error) {
+    // remove created user if email sending failed
+    await User.findByIdAndDelete(newUser.id);
+    return next(new AppError(
+      'There is an error creating an account. Please try again later',
+      500
+    ));
+  }
 
 });
 

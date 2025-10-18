@@ -38,6 +38,36 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json({ limit: '10kb' }));
 app.use(mongoSanitize());
 
+// Debug route to read email logs (development or localhost only)
+const emailLogger = require('./utils/emailLogger');
+app.get('/debug/email-logs', (req, res) => {
+  const isLocal = req.ip === '::1' || req.ip === '127.0.0.1' || req.hostname === 'localhost';
+  if (process.env.NODE_ENV !== 'development' && !isLocal) {
+    return res.status(403).json({ status: 'fail', message: 'Not allowed' });
+  }
+  const content = emailLogger.readLastLines(200);
+  res.type('text/plain').send(content || 'No email logs');
+});
+
+// Debug route to return a small parsed status (counts and last entries)
+app.get('/debug/email-status', (req, res) => {
+  const isLocal = req.ip === '::1' || req.ip === '127.0.0.1' || req.hostname === 'localhost';
+  if (process.env.NODE_ENV !== 'development' && !isLocal) {
+    return res.status(403).json({ status: 'fail', message: 'Not allowed' });
+  }
+  const raw = emailLogger.readLastLines(500);
+  if (!raw) return res.json({ status: 'success', counts: {}, last: [] });
+  const lines = raw.trim().split(/\r?\n/).map(l => {
+    try { return JSON.parse(l.replace(/^\[[^\]]+\]\s*/, '')); } catch (e) { return { raw: l }; }
+  });
+  const counts = lines.reduce((acc, cur) => {
+    const ev = cur.event || (cur.raw ? 'raw' : 'unknown');
+    acc[ev] = (acc[ev] || 0) + 1;
+    return acc;
+  }, {});
+  res.json({ status: 'success', counts, last: lines.slice(-20) });
+});
+
 app.use('/api/v1/users' , userRoutes);
 app.use('/api/v1/posts' , postRoutes);
 app.use('/api/v1/notifications' , notificationsRoutes);

@@ -38,3 +38,5 @@ exports.markAllRead = catchAsync(async (req, res, next) => {
         message: 'All notifications marked as read.'
     });
 });
+
+

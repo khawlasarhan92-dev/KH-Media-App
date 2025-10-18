@@ -108,23 +108,27 @@ const Profile = ({ id }: Props) => {
                                 {userProfile?.username}
                             </h1>
                             {/* أزرار الإجراء (Edit/Follow/Unfollow) */}
-                            <div className="flex flex-wrap items-center gap-4 md:gap-6 w-full justify-center md:justify-start">
+                            <div className="flex flex-nowrap items-center gap-3 sm:gap-4 md:gap-6 w-full justify-center
+                             md:justify-start overflow-x-auto">
                                 <h1 className="hidden sm:block text-2xl sm:text-3xl font-bold text-foreground">
                                     {userProfile?.username}
                                 </h1>
                                 {isOwnProfile ? (
                                     <Link href="/edit-profile">
-                                        <Button variant="outline" className="rounded-full px-6 text-sm hover:bg-accent/50 transition-all">
+                                        <Button variant="outline" 
+                                        className="rounded-full px-4 sm:px-6 text-sm hover:bg-accent/50 transition-all">
                                             Edit Profile
                                         </Button>
                                     </Link>
                                 ) : (
-                                    <div className="flex gap-4 items-center md:flex-col md:items-start md:gap-2">
-                                        <StartChatButton targetUserId={id} />
+                                    <div className="flex gap-3 items-center">
+                                        <div className="min-w-[110px] sm:min-w-[120px]">
+                                            <StartChatButton targetUserId={id} />
+                                        </div>
                                         <Button
                                             variant={isFollowing ? "destructive" : "default"}
                                             className={cn(
-                                                "rounded-full px-6 text-sm h-10 min-w-[120px] transition-all",
+                                                "rounded-full px-4 sm:px-6 text-sm h-10 min-w-[100px] sm:min-w-[120px] transition-all",
                                                 isFollowing 
                                                 ? "bg-destructive hover:bg-destructive/80" 
                                                 : "bg-primary hover:bg-primary/90 text-white"
@@ -139,14 +143,15 @@ const Profile = ({ id }: Props) => {
                                 )}
                             </div>
                             {/* الإحصائيات (Stats) */}
-                            <div className="flex flex-wrap gap-6 text-base md:text-lg pt-2">
-                                <p className="font-semibold">
+                            <div className="flex flex-nowrap md:flex-wrap gap-4 md:gap-6 text-sm md:text-lg pt-2 
+                            overflow-x-auto">
+                                <p className="font-semibold whitespace-nowrap">
                                     <span className="font-bold mr-1">{userProfile?.posts?.length || 0}</span> Posts
                                 </p>
-                                <p className="font-semibold">
+                                <p className="font-semibold whitespace-nowrap">
                                     <span className="font-bold mr-1">{userProfile?.followers?.length || 0}</span> Followers
                                 </p>
-                                <p className="font-semibold">
+                                <p className="font-semibold whitespace-nowrap">
                                     <span className="font-bold mr-1">{userProfile?.following?.length || 0}</span> Following
                                 </p>
                             </div>

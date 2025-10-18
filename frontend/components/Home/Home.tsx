@@ -50,7 +50,7 @@ const Home = () => {
 
   return (
     <div className='flex bg-[#ececec] dark:bg-[#23272f] min-h-screen'>
-     
+
       <div className='w-[20%] hidden md:block border-r-2 h-screen fixed'>
         <LeftSidebar />
       </div>
@@ -59,8 +59,8 @@ const Home = () => {
       
         <div className='md:hidden'>
           <Sheet>
-            <SheetTrigger className='fixed top-4 left-4 z-50 bg-white rounded-full shadow-lg p-2'>
-              <MenuIcon className='w-7 h-7 text-primary' />
+            <SheetTrigger className='fixed top-3 left-3 z-50 bg-white/80 rounded-full shadow-sm p-1'>
+              <MenuIcon className='w-5 h-5 text-primary' />
             </SheetTrigger>
             <SheetContent side='left' className='p-0 w-[80vw] max-w-xs'>
               <SheetTitle className='hidden' />
@@ -69,6 +69,8 @@ const Home = () => {
               <LeftSidebar />
             </SheetContent>
           </Sheet>
+          {/* Mount RightSidebar here on mobile so its floating trigger is available */}
+          <RightSidebar />
         </div>
         <Feed />
       </div>

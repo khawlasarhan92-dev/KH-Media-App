@@ -79,7 +79,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
             </button>
             <textarea
                 className="flex-1 resize-none bg-transparent outline-none border-none px-2 py-1 
-                text-sm text-gray-800 placeholder-gray-400"
+                text-sm text-gray-800 placeholder-gray-400 max-h-24 overflow-auto"
                 rows={1}
                 placeholder="Type a message..."
                 value={content}

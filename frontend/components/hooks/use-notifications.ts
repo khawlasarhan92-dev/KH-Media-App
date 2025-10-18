@@ -72,6 +72,29 @@ const useNotifications = () => {
         await handleAuthRequest(readReq);
       };
 
+        const markAsRead = async (id: string) => {
+          if (!id) return;
+          // optimistic update
+          const prev = notifications;
+          const target = prev.find(n => n._id === id);
+          if (!target || target.isRead) return;
+
+          const updated = prev.map(n => n._id === id ? { ...n, isRead: true } : n);
+          setNotifications(updated);
+          const newCount = updated.filter(n => !n.isRead).length;
+          dispatch(setUnreadCount(newCount));
+
+          try {
+            const readReq = () => axios.patch(`${BASE_API_URL}/notifications/${id}/read`, {}, { withCredentials: true });
+            await handleAuthRequest(readReq);
+          } catch (err) {
+            // rollback
+            setNotifications(prev);
+            const rollCount = prev.filter(n => !n.isRead).length;
+            dispatch(setUnreadCount(rollCount));
+          }
+        };
+
       useEffect(() => {
         fetchNotifications();
       }, [fetchNotifications]);
@@ -90,7 +113,7 @@ const useNotifications = () => {
     }, [realTimeNotification, fetchNotifications, dispatch]);
 
 
-  return { notifications, isLoading,unreadCount, markAllRead, fetchNotifications };
+  return { notifications, isLoading,unreadCount, markAllRead, fetchNotifications, markAsRead };
 };
 
 export default useNotifications;

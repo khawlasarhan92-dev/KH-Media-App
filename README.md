@@ -82,6 +82,17 @@ This project involved solving several complex technical challenges:
    - Create `.env` files in both `backend` and `frontend` folders.
    - Add required API keys, database URI, and other secrets (see `.env.example`).
 
+### Email for portfolio / demo (recommended)
+
+For portfolio demos we recommend using Mailtrap to capture outgoing emails instead of sending real mails. This prevents accidental emails to real users and makes it easy for reviewers to inspect OTPs and reset links.
+
+- Quick guide:
+	1. Create a Mailtrap account and a Sandbox inbox.
+	2. Copy the SMTP credentials and paste them into `backend/.env` or into your host environment variables (see `backend/.env.example`).
+	3. Start the backend and run `node backend/sendTestEmail.js` to verify delivery to Mailtrap.
+	4. For step-by-step instructions see `backend/README-mailtrap.md`.
+
+
 ### Running the Application
 
 | Script | Location | Command | Description |

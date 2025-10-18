@@ -67,7 +67,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onBack }) => {
         }
     }, [messages]);
 
-    const chatPartner = selectedChat?.members.find((member: Partial<{ _id: string; username: string; profilePicture?: string }>) => member._id !== currentUserId);
+    const chatPartner = selectedChat?.members
+    .find((member: Partial<{ _id: string; username: string; profilePicture?: string }>) =>
+         member._id !== currentUserId);
    
     const isPartnerOnline = chatPartner?._id  && Array.isArray(activeUsers) &&
      activeUsers.includes(chatPartner._id) ? true : false;
@@ -84,7 +86,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onBack }) => {
 
 
     return (
-    <div className="flex flex-col h-full w-full rounded-none md:rounded-xl">
+    <div className="flex flex-col h-full w-full min-h-0 rounded-none md:rounded-xl">
             {/* Header */}
             {selectedChat && chatPartner && (
                 <div className="flex items-center gap-4 px-5 py-4 border-b bg-white/80
@@ -119,8 +121,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onBack }) => {
             )}
             {/* Messages */}
             <div className="flex-1 flex flex-col gap-2 px-1 sm:px-2 md:px-6 py-2 md:py-4 
-            overflow-y-auto chat-bg-decor rounded-none md:rounded-xl" 
-            style={{ maxHeight: 'calc(100vh - 180px)' }}>
+            overflow-y-auto chat-bg-decor rounded-none md:rounded-xl min-h-0">
                 {isLoading ? (
                     <div className="text-center text-gray-400 py-8">Loading messages...</div>
                 ) : (
@@ -154,7 +155,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onBack }) => {
             </div>
             {/* Message Input */}
             {selectedChat && (
-                <div className="px-1 sm:px-2 md:px-6 py-2 md:py-3 bg-white/90 backdrop-blur-md border-t shadow-inner">
+                <div className="px-1 sm:px-2 md:px-6 py-2 md:py-3 bg-white/90 backdrop-blur-md border-t shadow-inner 
+                md:static flex-shrink-0">
                     <MessageInput chatId={selectedChat._id} />
                 </div>
             )}

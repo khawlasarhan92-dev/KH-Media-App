@@ -8,6 +8,7 @@ import { setAuthUser, setError, setIsLoading } from './authSlice';
 import { setUsers } from "./userSlice"
 import { RootState } from './store'; 
 import { User } from '@/types';
+import { toast } from 'sonner';
 
 
 export const followUnfollowUser = createAsyncThunk<
@@ -62,6 +63,7 @@ export const followUnfollowUser = createAsyncThunk<
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Failed to update follow status.';
       dispatch(setError(errorMessage));
+      try { toast.error(errorMessage); } catch (e) {}
       return rejectWithValue(errorMessage);
     } finally {
       dispatch(setIsLoading(false)); 

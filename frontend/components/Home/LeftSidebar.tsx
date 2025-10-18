@@ -169,10 +169,12 @@ type SidebarItem = LinkItem | ButtonItem;
                     if (isLogout) {
                         return (
                             <div key={link.label} onClick={(link as ButtonItem).onClick} className='cursor-pointer mt-4'>
-                                <div className='flex items-center space-x-3 p-3 rounded-full hover:bg-gray-200 transition-colors shadow-sm w-full sm:w-full justify-center sm:mb-2'>
-                                    {link.icon}
-                                   
-                                    <p className='block lg:block lg:text-lg text-base lg:ml-4 ml-1 text-foreground/80 w-full text-center'>Logout</p>
+                                <div className='flex items-center space-x-3 p-3 rounded-full hover:bg-gray-200 
+                                transition-colors shadow-sm w-full sm:w-full'>
+                                    <div className='w-6 h-6 flex items-center justify-center text-lg'>
+                                        {link.icon}
+                                    </div>
+                                    <p className='block lg:block lg:text-lg text-base text-foreground/80 ml-2'>Logout</p>
                                 </div>
                             </div>
                         );

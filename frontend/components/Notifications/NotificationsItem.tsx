@@ -10,6 +10,7 @@ import { cn } from '../../lib/utils';
 type Props = {
    
     notification: Notifications; 
+    markAsRead?: (id: string) => Promise<void>;
 };
 
 
@@ -39,7 +40,7 @@ const getNotificationDetails = (notification: Notifications): { text: string; li
     return { text, link };
 };
 
-const NotificationsItem = ({ notification }: Props) => {
+const NotificationsItem = ({ notification, markAsRead }: Props) => {
     const { text, link } = getNotificationDetails(notification);
     
     const timeAgo = formatDistanceToNow(new Date(notification.createdAt), {
@@ -50,7 +51,7 @@ const NotificationsItem = ({ notification }: Props) => {
     const isUnread = !notification.isRead;
 
     return (
-        <Link href={link} passHref className="block">
+        <Link href={link} passHref className="block" onClick={() => { if (markAsRead) markAsRead(notification._id); }}>
             <div
                 className={cn(
                     "flex items-center justify-between p-4 bg-gray-50 dark:bg-muted/80 rounded-xl shadow-sm border border-gray-200 mb-2 hover:bg-gray-100 dark:hover:bg-muted/60 transition duration-200 group",
@@ -62,15 +63,18 @@ const NotificationsItem = ({ notification }: Props) => {
                     <Avatar className="w-9 h-9 flex-shrink-0 ring-2 ring-primary/10">
                         {/* معالجة حالة المرسل المحذوف */}
                         <AvatarImage src={notification.sender?.profilePicture || '/default-avatar.png'} />
-                        <AvatarFallback>{notification.sender?.username ? notification.sender.username[0] : '?'}</AvatarFallback>
+                        <AvatarFallback>{notification.sender?.username 
+                        ? notification.sender.username[0] 
+                        : '?'}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col min-w-0">
-                        <p className="font-semibold truncate text-base">
-                            <span className="text-primary hover:underline font-bold">
+                        <p className="font-semibold truncate text-base"
+                         title={`${notification.sender?.username || 'Unknown User'} ${text}`}>
+                            <span className="text-primary hover:underline font-bold truncate">
                                 {notification.sender?.username || ' Unknown User'}
                             </span>
                             {' '}
-                            <span className="dark:text-muted-foreground font-normal text-gray-700">{text}</span>
+                            <span className="dark:text-muted-foreground font-normal text-gray-700 truncate">{text}</span>
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">{timeAgo}</p>
                     </div>
@@ -88,14 +92,16 @@ const NotificationsItem = ({ notification }: Props) => {
                             />
                         </div>
                     ) : notification.type !== 'follow' && !notification.contentId?.image?.url ? (
-                        <div className="w-fit h-8 flex items-center justify-center bg-red-50 rounded-xl 
-                        text-[11px] font-semibold text-red-400 border shadow-sm px-3">
+                        <div className="w-fit h-8 flex items-center justify-center bg-red-50/80
+                         rounded-xl text-[11px] font-semibold text-red-600 border border-red-100 shadow-sm px-3"
+                          role="status" aria-label="Deleted by owner">
                             Deleted by owner
                         </div>
                     ) : null}
 
                     {isUnread && (
-                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" title="Unread"></div>
+                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 ml-1"
+                         title="Unread" aria-label="Unread notification" />
                     )}
                 </div>
             </div>

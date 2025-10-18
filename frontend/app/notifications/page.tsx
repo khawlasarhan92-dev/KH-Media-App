@@ -1,8 +1,8 @@
-'use client'
+ 'use client'
 import React from 'react';
-import useNotifications from '@/components/hooks/use-notifications'; 
-import NotificationsItem from '../../components/Notifications/NotificationsItem'; 
-import { Button } from '@/components/ui/button'; 
+import useNotifications from '@/components/hooks/use-notifications';
+import NotificationsItem from '../../components/Notifications/NotificationsItem';
+import { Button } from '@/components/ui/button';
 import { Loader2, Bell, CheckCheck } from 'lucide-react';
 import AppLayout from '../../components/Layout/AppLayout'; 
 
@@ -47,9 +47,11 @@ const NotificationsPage = () => {
                         <p className="text-sm">Start interacting with posts and follow users.</p>
                     </div>
                 ) : (
-                    <div className="space-y-1">
+                    <div className="space-y-1" role="list" aria-label="Notifications list">
                         {notifications.map((notification) => (
-                            <NotificationsItem key={notification._id} notification={notification} />
+                            <div role="listitem" key={notification._id}>
+                                <NotificationsItem notification={notification} />
+                            </div>
                         ))}
                     </div>
                 )}
