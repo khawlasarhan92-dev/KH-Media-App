@@ -89,12 +89,12 @@ const EditProfile = () => {
       <div className="flex-1 md:ml-[20%] overflow-auto flex flex-col items-center justify-center">
         <div className="md:hidden">
           <Sheet>
-            <SheetTrigger>
-              <MenuIcon />
+            <SheetTrigger className='fixed top-4 left-4 z-50 bg-white rounded-full shadow-lg p-2'>
+              <MenuIcon className='w-7 h-7 text-primary' />
             </SheetTrigger>
-            <SheetContent>
-              <SheetTitle></SheetTitle>
-              <SheetDescription></SheetDescription>
+            <SheetContent side='left' className='p-0 w-[80vw] max-w-xs'>
+              <SheetTitle className='hidden'></SheetTitle>
+              <SheetDescription className='hidden'></SheetDescription>
               <LeftSidebar />
             </SheetContent>
           </Sheet>

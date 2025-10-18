@@ -10,7 +10,7 @@ const logFile = path.join(logDir, 'email.log');
 const append = (entry) => {
   const line = `[${new Date().toISOString()}] ${typeof entry === 'string' ? entry : JSON.stringify(entry)}\n`;
   fs.appendFile(logFile, line, (err) => {
-    if (err) console.error('Failed to write email log:', err);
+    if (err) console.error('Failed to write email log:', err && err.message ? err.message : err);
   });
 };
 
@@ -21,7 +21,7 @@ const readLastLines = (maxLines = 200) => {
     const lines = data.trim().split(/\r?\n/);
     return lines.slice(-maxLines).join('\n');
   } catch (err) {
-    console.error('Failed to read email log:', err);
+    console.error('Failed to read email log:', err && err.message ? err.message : err);
     return '';
   }
 };

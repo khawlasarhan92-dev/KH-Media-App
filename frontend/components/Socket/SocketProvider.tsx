@@ -16,7 +16,7 @@ import { Notifications } from '../hooks/use-notifications';
 
 
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:8000";
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000";
 
 interface SocketContextType {
     socket: Socket | null;
@@ -54,6 +54,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         }
 
         //  إنشاء الاتصال
+        console.log('SocketProvider: connecting to', SOCKET_URL);
         newSocket = io(SOCKET_URL, {
             withCredentials: true,
             query: {
@@ -65,11 +66,17 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
         //  معالجة الأحداث الأساسية
         newSocket.on('connect', () => {
+            console.log('Socket connected, id =', newSocket.id);
             setIsConnected(true);
             dispatch(fetchChats()); 
         });
 
+        newSocket.on('connect_error', (err: any) => {
+            console.error('Socket connect_error:', err && err.message ? err.message : err);
+        });
+
         newSocket.on('disconnect', () => {
+            console.log('Socket disconnected');
             setIsConnected(false);
             dispatch(setActiveUsers([] as string[]));
         });

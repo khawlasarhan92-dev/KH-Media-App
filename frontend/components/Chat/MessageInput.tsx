@@ -44,7 +44,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
             if (sendNewMessage.fulfilled.match(result)) {
             const newMessage = result.payload;
 
-        
+                console.log('Emitting send_message via socket with:', newMessage);
                 socket.emit('send_message', { newMessage }); 
             }
 

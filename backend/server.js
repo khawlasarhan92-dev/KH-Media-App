@@ -46,6 +46,9 @@ setActiveUsers(activeUsers);
 
 // Socket.IO Events
 io.on("connection", (socket) => {
+  try{
+    console.log('Socket connected handshake - id:', socket.id, 'user:', socket.user && socket.user.id, 'handshake origin:', socket.handshake.headers.origin);
+  } catch(e) { /* ignore */ }
   // Join user to their own room and update active users
   socket.join(socket.user.id);
   activeUsers.set(socket.user.id.toString(), socket.id);
@@ -66,6 +69,9 @@ io.on("connection", (socket) => {
     console.log(`User ${socket.user.id} switched to room: ${newChatId}`);
 });
   socket.on('send_message', (data) => {
+    try{
+      console.log('send_message received from socket id', socket.id, 'payload keys:', Object.keys(data || {}));
+    } catch(e){}
     const io = getSocketIo(); 
     const { newMessage } = data; 
     if (!newMessage || !newMessage.chat) {

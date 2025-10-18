@@ -20,6 +20,14 @@ const app = express();
 app.use('/', express.static('uploads'));
 app.use(cookieParser());
 app.use(helmet());
+// Log incoming request origin/host for debugging (non-invasive)
+app.use((req, res, next) => {
+  try {
+    console.log('Incoming request - origin:', req.headers.origin, 'host:', req.headers.host, 'url:', req.originalUrl);
+  } catch (e) { /* ignore logging errors */ }
+  next();
+});
+
 app.use(cors({
   origin: ['http://localhost:3000',
      'https://kh-media-app.pages.dev'], 

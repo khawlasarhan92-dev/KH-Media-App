@@ -1,20 +1,19 @@
 const io = require('socket.io-client');
-const axios = require('axios'); // لإرسال طلب الـ Comment (اختياري)
+const axios = require('axios'); 
 
-// 🚨🚨 يجب تحديث هذين التوكنين بآخر توكنات صالحة 🚨🚨
-const TOKEN_A_RECEIVER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Y2FmZDNjNDE0ZmYwMTU0MjkyNmNlYiIsImlhdCI6MTc1OTUwNTA4MywiZXhwIjoxNzY3MjgxMDgzfQ.Y4LGIqrLEMObJq-RUgD7GAcHkRlK5UKGlKy_mJB67Qw'; // مالك المنشور
-const TOKEN_B_SENDER = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Y2FmY2E5NDE0ZmYwMTU0MjkyNmNlOCIsImlhdCI6MTc1OTUwNTE0NSwiZXhwIjoxNzY3MjgxMTQ1fQ.awdQMMZssO9kMMpmQZKUkHGKolA8YmKOf3lBHEbrq54';  // المُعلق
+// read test tokens from environment v hardcoding secrets in repoariables to avoid
+const TOKEN_A_RECEIVER = process.env.TEST_TOKEN_A;
+const TOKEN_B_SENDER = process.env.TEST_TOKEN_B;
 
 const SERVER_URL = 'http://localhost:8000';
-const POST_ID = '68dfb0551e9816bbb1a75d8a'; // ID المنشور الذي ستعلق عليه
+const POST_ID = '68dfb0551e9816bbb1a75d8a'; 
 
-// ------------------------------------------------------------------
 
-// 1. إعداد المستخدم A (المستلم)
+
+
 function setupReceiver(token) {
     console.log('--- Setting up RECEIVER (User A) ---');
-    
-    // إنشاء الاتصال مع تمرير التوكن في الـ Query
+  
     const socket = io(SERVER_URL, {
         query: { token: token },
         transports: ['websocket'] 
@@ -28,20 +27,29 @@ function setupReceiver(token) {
         console.error('❌ User A Connect Error:', err.message);
     });
 
-    // الاستماع لحدث الإشعار
+   
     socket.on('newNotification', (data) => {
         console.log('\n🎉🎉🎉 NOTIFICATION RECEIVED (User A) 🎉🎉🎉');
-        console.log('Data:', data);
-        // يمكنك إيقاف البرنامج هنا إذا كنت تريد
-        // process.exit(0); 
+        // print only safe parts of data
+        try {
+            const summary = {
+                type: data && data.type ? data.type : 'unknown',
+                from: data && data.from ? data.from : undefined,
+                createdAt: data && data.createdAt ? data.createdAt : undefined,
+            };
+            console.log('Notification summary:', summary);
+        } catch (e) {
+            console.log('Notification received');
+        }
+       
     });
 }
 
-// 2. إعداد المستخدم B (المرسل) وتشغيل التعليق
+
 async function setupSenderAndSendComment(token) {
     console.log('\n--- Setting up SENDER (User B) ---');
 
-    // إنشاء اتصال B للتأكد من انضمامه للغرفة
+   
     const socket = io(SERVER_URL, {
         query: { token: token },
         transports: ['websocket'] 
@@ -50,8 +58,8 @@ async function setupSenderAndSendComment(token) {
     socket.on('connect', async () => {
         console.log(`✅ User B (Sender) connected. Socket ID: ${socket.id}`);
         
-        // 🚨 إرسال طلب التعليق بعد ثانية واحدة من الاتصال (محاكاة Postman)
-        console.log('Sending POST request to add comment...');
+       
+    console.log('Sending POST request to add comment...');
         try {
             await axios.post(
                 `${SERVER_URL}/api/v1/posts/comment/${POST_ID}`,
@@ -64,7 +72,7 @@ async function setupSenderAndSendComment(token) {
             );
             console.log('Successfully sent comment request (check Server Terminal for logs!)');
         } catch (err) {
-            console.error('❌ AXIOS ERROR (Comment Request Failed):', err.response?.data || err.message);
+            console.error('❌ AXIOS ERROR (Comment Request Failed):', err.response?.data?.message || err.message);
         }
     });
 

@@ -12,10 +12,10 @@ const run = async () => {
       timeout: 10000,
     });
     console.log('Status:', res.status);
-    console.log('Data:', res.data);
+    console.log('Message:', res.data && res.data.message ? res.data.message : 'No message');
   } catch (err) {
     if (err.response) {
-      console.error('Error response:', err.response.status, err.response.data);
+      console.error('Error response:', err.response.status, err.response.data && err.response.data.message ? err.response.data.message : 'No message');
     } else {
       console.error('Request error:', err.message);
     }

@@ -17,8 +17,7 @@ const run = async () => {
     process.exit(0);
   } catch (err) {
     console.error('Test email failed:', err && err.message ? err.message : err);
-    // Print nested info if available
-    if (err && err.response) console.error('Response:', err.response);
+    // avoid dumping full response objects into stdout in production logs
     process.exit(2);
   }
 };

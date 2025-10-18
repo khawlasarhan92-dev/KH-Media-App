@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const emailLogger = require('./emailLogger');
+  const axios = require('axios');
 
 const sendEmail = async(options) =>{
   let transporterConfig;
@@ -51,7 +52,8 @@ const sendEmail = async(options) =>{
   if (transporter) {
     transporter.verify((verifyErr, success) => {
       if (verifyErr) {
-        console.error('Transporter verify error:', verifyErr);
+        // avoid dumping potentially sensitive verification details
+        console.error('Transporter verify error: check SMTP credentials/host');
       } else {
         console.log('Transporter is ready to send messages');
       }
@@ -61,17 +63,17 @@ const sendEmail = async(options) =>{
   while (attempt <= maxRetries) {
     try {
       attempt += 1;
-      console.log(`Attempt ${attempt} to send email to ${mailOptions.to}`);
-      emailLogger.append({ event: 'attempt', attempt, to: mailOptions.to });
+  console.log(`Attempt ${attempt} to send email to ${mailOptions.to}`);
+  emailLogger.append({ event: 'attempt', attempt, to: mailOptions.to });
       if (transporterConfig.provider === 'mailjet-http') {
         // send via Mailjet HTTP API
-        const axios = require('axios');
+      
         const auth = Buffer.from(`${process.env.MAILJET_API_KEY}:${process.env.MAILJET_API_SECRET}`).toString('base64');
         const body = {
           Messages: [
             {
               From: {
-                Email: process.env.EMAIL || 'no-reply@yourdomain.com',
+                Email: process.env.EMAIL,
                 Name: 'media-app',
               },
               To: [
@@ -91,8 +93,9 @@ const sendEmail = async(options) =>{
           },
           timeout: 10000,
         });
-        // Mailjet returns info about sent messages
-        emailLogger.append({ event: 'sent', attempt, to: mailOptions.to, mailjet: resp.data });
+        // Mailjet returns info about sent messages — store minimal response
+        emailLogger.append({ event: 'sent', attempt, to: mailOptions.to,
+           mailjetSummary: { status: resp.data && resp.data.Messages ? 'ok' : 'unknown' } });
         console.log('Email sent successfully via Mailjet on attempt', attempt);
         return;
       }
@@ -104,18 +107,12 @@ const sendEmail = async(options) =>{
       console.error(`Email send error on attempt ${attempt}:`, err && err.message ? err.message : err);
       // If max attempts reached, throw detailed info
       if (attempt > maxRetries) {
+        // Avoid logging full error stack and transporter auth info to stdout — keep structured log file entry
         const full = {
           message: err.message,
           code: err.code,
-          response: err.response,
-          stack: err.stack,
-          transporterConfig: {
-            host: transporterConfig.host,
-            port: transporterConfig.port,
-            secure: transporterConfig.secure,
-          },
         };
-        console.error('Max email send attempts reached. Full error object:', full);
+        console.error('Max email send attempts reached. Check email logs for details.');
         emailLogger.append({ event: 'failed', attempt, to: mailOptions.to, error: full });
         throw err;
       }
