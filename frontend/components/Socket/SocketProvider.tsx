@@ -71,8 +71,14 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
             dispatch(fetchChats()); 
         });
 
-        newSocket.on('connect_error', (err: any) => {
-            console.error('Socket connect_error:', err && err.message ? err.message : err);
+        newSocket.on('connect_error', (err: unknown) => {
+            // Narrow unknown error before logging
+            if (err && typeof err === 'object' && 'message' in err) {
+                const maybeErr = err as { message?: string };
+                console.error('Socket connect_error:', maybeErr.message);
+            } else {
+                console.error('Socket connect_error:', err);
+            }
         });
 
         newSocket.on('disconnect', () => {
